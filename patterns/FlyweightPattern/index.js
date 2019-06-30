@@ -1,5 +1,5 @@
 const Todo = function (data) {
-  this.name = data.name
+  this.name = data.name // UNIQUE
   this.priority = data.priority
   this.section = data.section
   this.project = data.project
@@ -37,6 +37,7 @@ let members = ['None', 'Jakkapan', 'Tissanu']
 let completions = ['True', 'False']
 
 var initialMemory = process.memoryUsage().heapUsed
+
 for(let i = 0; i < 1000000; i++ ) {
   todos.add({
     name: 'Todo Name' + i,
@@ -51,4 +52,5 @@ for(let i = 0; i < 1000000; i++ ) {
 var afterMemory = process.memoryUsage().heapUsed
 
 console.log('Used memory: ' + (afterMemory - initialMemory) / 1000000 + ' MB.')
-console.log('Todo Count: ' + todos.getCount())
+console.log('Todo Count: ' + Number(todos.getCount()).toLocaleString())
+

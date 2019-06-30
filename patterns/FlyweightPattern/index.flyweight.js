@@ -1,11 +1,15 @@
 const Todo = function (data) {
-  this.flyweight = TodoFlyweightFactory.get(data.priority, data.section, data.project, data.assignTo, data.complete)
   this.name = data.name
+  this.flyweight = TodoFlyweightFactory.get(data.priority, data.section, data.project, data.assignTo, data.complete)
   // this.priority = data.priority
   // this.section = data.section
   // this.project = data.project
   // this.assignTo = data.assignTo
   // this.complete = data.complete
+}
+
+Todo.prototype.getPriority = function () {
+  return this.flyweight.priority
 }
 
 const TodoFlyweight = function (priority, section, project, assignTo, complete) {
@@ -19,22 +23,22 @@ const TodoFlyweight = function (priority, section, project, assignTo, complete) 
 const TodoFlyweightFactory = function (priority, section, project, assignTo, complete){
   let todos = {}
   let count = 0
+  
   function get (priority, section, project, assignTo, complete) {
     if(!todos[priority + section + project + assignTo + complete]) {
       todos[priority + section + project + assignTo + complete] = new TodoFlyweight(priority, section, project, assignTo, complete)
       count++
     }
-
     return todos[priority + section + project + assignTo + complete]
   }
 
-  function getTodoCount () {
+  function getFlyweightCount () {
     return count
   }
 
   return {
     get: get,
-    getTodoCount: getTodoCount
+    getFlyweightCount: getFlyweightCount
   }
 }()
 
@@ -82,6 +86,5 @@ for(let i = 0; i < 1000000; i++ ) {
 var afterMemory = process.memoryUsage().heapUsed
 
 console.log('Used memory: ' + (afterMemory - initialMemory) / 1000000 + ' MB.')
-console.log('Todo Count: ' + todos.getCount())
-
-console.log('Todo Flyweight Count: ' + TodoFlyweightFactory.getTodoCount())
+console.log('Todo Count: ' + Number(todos.getCount()).toLocaleString())
+console.log('Todo Flyweight Count: ' + TodoFlyweightFactory.getFlyweightCount())
